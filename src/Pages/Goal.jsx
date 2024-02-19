@@ -3,14 +3,14 @@ import { useState } from "react";
 import Chatting from "../Components/Goal/Chatting";
 import ChattingNext from "../Components/Goal/ChattingNext";
 import FlowHome from "../Components/Goal/FlowHome";
+import FlowSidebar from "../Components/sidebar/FlowSidebar";
 
 const Goal = () => {
   const [chatting, setChatting] = useState(true);
   return (
-    <>
-      <div className="max-w-[800px] w-full mx-auto">
-        <FlowHome />
-      </div>
+    <div className="flex items-start justify-between">
+      <FlowSidebar />
+      <FlowHome />
       {/* <div className="max-w-[703px] w-full mx-auto">
       <div className="point pt-[56px] pb-[21px] px-[60px] mt-[130px] md:mt[80px] mb-[21px] bg-white  rounded-[10px]">
         {chatting ? <Chatting /> : <ChattingNext />}
@@ -24,7 +24,7 @@ const Goal = () => {
         </button>
       </div>
     </div> */}
-    </>
+    </div>
   );
 };
 

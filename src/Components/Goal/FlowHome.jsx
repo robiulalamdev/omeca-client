@@ -5,6 +5,8 @@ import ReactFlow, {
   ConnectionLineType,
   useNodesState,
   useEdgesState,
+  Background,
+  BackgroundVariant,
 } from "reactflow";
 import dagre from "dagre";
 import "reactflow/dist/style.css";
@@ -14,7 +16,13 @@ export const initialNodes = [
   {
     id: "1",
     type: "custom",
-    data: { id: "1", name: "Robiul Alam", job: "CEO", emoji: "😎" },
+    data: {
+      id: "1",
+      name: "Initial",
+      component: "Int",
+    },
+    sourcePosition: "right",
+    targetPosition: "left",
     position: { x: 0, y: 0 },
   },
 ];
@@ -45,8 +53,8 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? "left" : "top";
-    node.sourcePosition = isHorizontal ? "right" : "bottom";
+    node.targetPosition = isHorizontal ? "left" : "right";
+    node.sourcePosition = isHorizontal ? "right" : "left";
 
     // We are shifting the dagre node position (anchor=center center) to the top left
     // so it matches the React Flow node anchor point (top left).
@@ -62,6 +70,9 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 };
 
 const FlowHome = () => {
+  // const { initialNodes } = useSelector((state) => state.global);
+  // console.log(initialNodes);
+
   const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
     initialNodes,
     initialEdges
@@ -94,19 +105,19 @@ const FlowHome = () => {
       ),
     []
   );
-  const onLayout = useCallback(
-    (direction) => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } =
-        getLayoutedElements(nodes, edges, direction);
+  // const onLayout = useCallback(
+  //   (direction) => {
+  //     const { nodes: layoutedNodes, edges: layoutedEdges } =
+  //       getLayoutedElements(nodes, edges, direction);
 
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
-    },
-    [nodes, edges]
-  );
+  //     setNodes([...layoutedNodes]);
+  //     setEdges([...layoutedEdges]);
+  //   },
+  //   [nodes, edges]
+  // );
 
   return (
-    <div>
+    <div className="w-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -121,7 +132,19 @@ const FlowHome = () => {
           <button onClick={() => onLayout("TB")}>vertical layout</button>
           <button onClick={() => onLayout("LR")}>horizontal layout</button>
         </Panel> */}
-        <div className="h-screen bg-black"></div>
+        <Background
+          id="1"
+          gap={20}
+          color="gray"
+          variant={BackgroundVariant.Dots}
+        />
+        <Background
+          id="2"
+          gap={20}
+          color="gray"
+          variant={BackgroundVariant.Dots}
+        />
+        <div className="h-screen bg-gray-50"></div>
       </ReactFlow>
     </div>
   );

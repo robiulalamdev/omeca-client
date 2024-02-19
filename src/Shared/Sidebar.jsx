@@ -41,12 +41,14 @@ const Sidebar = ({ handleSidebar, sidebar }) => {
       <div
         className={`flex-shrink-0 text-sm w-[221px] bg-white pt-[33px] fixed left-0 h-[100vh] px-5 ${
           sidebar ? "block" : "hidden"
-        } xl:block z-10 xl:z-0`}>
+        } xl:block z-10 xl:z-0`}
+      >
         <div className="flex justify-between items-center mb-4">
           <p className="p-[6px]  text-[#0D0D0E] font-bold">Home </p>
           <div
             className="block xl:hidden cursor-pointer"
-            onClick={handleSidebar}>
+            onClick={handleSidebar}
+          >
             <IoMdClose />
           </div>
         </div>
@@ -57,7 +59,8 @@ const Sidebar = ({ handleSidebar, sidebar }) => {
                 location.pathname === item.path && "bg-[#EFF3F7]"
               } flex items-center gap-[10px] p-[6px] text-secondary hover:bg-[#EFF3F7] rounded-[4px]`}
               key={index}
-              to={item.path}>
+              to={item.path}
+            >
               <img src={item.pic} alt="" /> {item.title}
             </Link>
           ))}
