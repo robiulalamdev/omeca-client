@@ -21,8 +21,8 @@ const DashboardLayout = () => {
       <div
         className={`xl:flex justify-between h-full md:pt-[82px] pb-[100px] w-full`}
       >
-        {/* <Sidebar handleSidebar={handleSidebar} sidebar={sidebar} /> */}
-        <div className="overflow-y-auto w-full h-[100vh] flex-grow">
+        <Sidebar handleSidebar={handleSidebar} sidebar={sidebar} />
+        <div className="overflow-y-auto w-full h-[100vh] flex-grow !relative">
           <Outlet />
         </div>
       </div>

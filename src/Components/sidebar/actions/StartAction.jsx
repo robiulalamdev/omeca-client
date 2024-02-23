@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setActionData,
   setActiveComponent,
@@ -13,10 +14,41 @@ const apiSteps = [
 ];
 
 const StartAction = () => {
+  const { activeComponent } = useSelector((state) => state.global);
   const [step, setStep] = useState(1);
   const [stepTwo, setStepTwo] = useState("");
 
   const dispatch = useDispatch();
+
+  function generateUniqueId() {
+    // Get the current date and time
+    const now = new Date();
+
+    // Format the date and time as a string
+    const dateString = now.toISOString().replace(/[-:TZ]/g, "");
+
+    // Generate a random number between 0 and 9999
+    const randomNumber = Math.floor(Math.random() * 10000);
+
+    // Combine the date string and random number to create the unique ID
+    const uniqueId = dateString + randomNumber.toString().padStart(4, "0");
+
+    return uniqueId;
+  }
+
+  const handleSetData = (data) => {
+    const id = generateUniqueId();
+    dispatch(
+      setActionData({
+        parent_id: activeComponent?.parent_id,
+        new_id: `${activeComponent?.parent_id}${id}`,
+        data: data,
+      })
+    );
+    setStep(1);
+    setStepTwo("");
+    dispatch(setActiveComponent(null));
+  };
 
   return (
     <div className="mt-8 px-8">
@@ -76,16 +108,9 @@ const StartAction = () => {
 
           {stepTwo === "Prompt" && (
             <div
-              onClick={() => {
-                dispatch(
-                  setActionData(
-                    "User will select single prompt or prompt chain"
-                  )
-                );
-                setStep(1);
-                setStepTwo("");
-                dispatch(setActiveComponent(null));
-              }}
+              onClick={() =>
+                handleSetData("User will select single prompt or prompt chain")
+              }
               className="w-full break-all h-fit p-2 text-sm bg-indigo-600 text-white rounded cursor-pointer"
             >
               User will select single prompt or prompt chain
@@ -95,12 +120,7 @@ const StartAction = () => {
             <div className="grid grid-cols-1 gap-2">
               {apiSteps.map((api, index) => (
                 <div
-                  onClick={() => {
-                    dispatch(setActionData(api));
-                    setStep(1);
-                    setStepTwo("");
-                    dispatch(setActiveComponent(null));
-                  }}
+                  onClick={() => handleSetData(api)}
                   key={index}
                   className="w-full break-all h-fit p-2 text-sm bg-indigo-500 hover:bg-indigo-600 text-white rounded cursor-pointer"
                 >

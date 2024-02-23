@@ -39,7 +39,7 @@ const Sidebar = ({ handleSidebar, sidebar }) => {
   return (
     <>
       <div
-        className={`flex-shrink-0 text-sm w-[221px] bg-white pt-[33px] fixed left-0 h-[100vh] px-5 ${
+        className={`flex-shrink-0 text-sm w-[221px] bg-white pt-[33px] fixed left-0 h-[100vh] px-5 !z-[999999999999999] ${
           sidebar ? "block" : "hidden"
         } xl:block z-10 xl:z-0`}
       >

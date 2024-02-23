@@ -2,49 +2,61 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Handle, Position } from "reactflow";
 import InitialNode from "./Nodes/InitialNode";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActionData } from "../../redux/features/globals/globalsSlice";
+import {
+  setActionData,
+  setActiveComponent,
+} from "../../redux/features/globals/globalsSlice";
+import { iPlus } from "../../lib/icons/icons";
+import StartAction from "../sidebar/actions/StartAction";
 
 const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
   const { actionData } = useSelector((state) => state.global);
   const dispatch = useDispatch();
-  const handleNode = (id) => {
-    console.log(id);
+
+  const handleNode = (parentId, newId, data) => {
     const newNode = {
-      id: `${id}`,
+      id: newId,
       type: "custom",
+      sourcePosition: "right",
+      targetPosition: "left",
       data: {
-        id: `${id}`,
+        id: newId,
         name: "New Node",
         job: "New Job",
         emoji: "🚀",
+        data: data,
         componentData: actionData,
       },
       position: { x: 400, y: 400 },
     };
-
     const newEdge = {
-      id: `e${`${id}`}`,
-      source: `1`,
-      target: `${id}`,
+      id: `e$${newId}`,
+      source: parentId,
+      target: newId,
       type: "Bezier",
       animated: false,
     };
 
-    // Call setNodes and setEdges to update the nodes and edges state
+    console.log(newNode, newEdge);
     setNodes((prevNodes) => [...prevNodes, newNode]);
     setEdges((prevEdges) => [...prevEdges, newEdge]);
-    dispatch(setActionData(null));
   };
 
   useMemo(() => {
-    if (actionData) {
-      const id = nodes.length + 1;
-      console.log("length", nodes.length, "new:", id);
-      handleNode(id);
+    if (actionData?.parent_id) {
+      console.log(actionData);
+      handleNode(actionData?.parent_id, actionData?.new_id, actionData?.data);
+      dispatch(setActionData(null));
     }
   }, [actionData]);
+
+  const handleAdd = (data) => {
+    dispatch(
+      setActiveComponent({ parent_id: data?.id, component: <StartAction /> })
+    );
+  };
 
   return (
     <>
@@ -58,9 +70,30 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
         />
       )}
 
-      {data?.componentData && (
+      {/* {data?.componentData && (
         <div className="px-4 py-2 shadow-md rounded border-[1px] bg-black border-blue-600 min-w-[300px] max-w-[300px] max-h-fit min-h-[100px] backdrop:blur-sm">
           <h1 className="text-white">{data?.componentData}</h1>
+        </div>
+      )} */}
+
+      {data?.data && (
+        <div className="px-4 py-2 shadow-md rounded border-[1px] bg-black border-blue-600 min-w-[300px] max-w-[300px] max-h-fit min-h-[100px] backdrop:blur-sm">
+          <div className="">
+            <p className="text-xs text-white mt-3">{data?.data}</p>
+
+            <div className="flex items-center border border-gray-200 bg-transparent rounded mt-8">
+              <button
+                onClick={() => handleAdd(data)}
+                className="w-10 h-7 text-white flex justify-center items-center border-r border-gray-200"
+              >
+                {iPlus}
+              </button>
+              <input
+                type="text"
+                className="w-full h-7 rounded-sm outline-none px-2 bg-transparent border-none text-white text-xs"
+              />
+            </div>
+          </div>
         </div>
       )}
 

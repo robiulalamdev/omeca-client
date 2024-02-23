@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useMemo } from "react";
 import ReactFlow, {
@@ -11,6 +12,8 @@ import ReactFlow, {
 import dagre from "dagre";
 import "reactflow/dist/style.css";
 import CustomNode from "./CustomNode";
+import { useDispatch, useSelector } from "react-redux";
+import { setActionData } from "../../redux/features/globals/globalsSlice";
 
 export const initialNodes = [
   {
@@ -70,9 +73,6 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 };
 
 const FlowHome = () => {
-  // const { initialNodes } = useSelector((state) => state.global);
-  // console.log(initialNodes);
-
   const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
     initialNodes,
     initialEdges
@@ -105,19 +105,12 @@ const FlowHome = () => {
       ),
     []
   );
-  // const onLayout = useCallback(
-  //   (direction) => {
-  //     const { nodes: layoutedNodes, edges: layoutedEdges } =
-  //       getLayoutedElements(nodes, edges, direction);
 
-  //     setNodes([...layoutedNodes]);
-  //     setEdges([...layoutedEdges]);
-  //   },
-  //   [nodes, edges]
-  // );
+  console.log("Nodes: ", nodes);
+  console.log("Edges: ", edges);
 
   return (
-    <div className="w-full">
+    <div className="w-full z-10 relative">
       <ReactFlow
         nodes={nodes}
         edges={edges}

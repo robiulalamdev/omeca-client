@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { Handle, Position } from "reactflow";
@@ -6,9 +8,14 @@ import { useDispatch } from "react-redux";
 import { setActiveComponent } from "../../../redux/features/globals/globalsSlice";
 import StartAction from "../../sidebar/actions/StartAction";
 
-const InitialNode = (...props) => {
+const InitialNode = ({ data, nodes, edges, setNodes, setEdges }) => {
   const dispatch = useDispatch();
-  console.log(props);
+
+  const handleAdd = (data) => {
+    dispatch(
+      setActiveComponent({ parent_id: data?.id, component: <StartAction /> })
+    );
+  };
   return (
     <div className="px-4 py-2 shadow-md rounded border-[1px] bg-black border-blue-600 min-w-[300px] max-w-[300px] max-h-fit min-h-[100px] backdrop:blur-sm">
       <h1 className="text-blue-600">Chat with ChatGPT-2D</h1>
@@ -30,7 +37,7 @@ const InitialNode = (...props) => {
 
         <div className="flex items-center border border-gray-200 bg-transparent rounded mt-8">
           <button
-            onClick={() => dispatch(setActiveComponent(<StartAction />))}
+            onClick={() => handleAdd(data)}
             className="w-10 h-7 text-white flex justify-center items-center border-r border-gray-200"
           >
             {iPlus}

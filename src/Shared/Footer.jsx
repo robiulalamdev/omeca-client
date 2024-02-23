@@ -40,7 +40,7 @@ const Footer = () => {
     },
   ];
   return (
-    <div className="bg-[#D7DDE2] px-8 pt-5 pb-4 flex flex-wrap items-center gap-4 justify-center md:justify-between fixed w-full bottom-0">
+    <div className="bg-[#D7DDE2] px-8 pt-5 pb-4 flex flex-wrap items-center gap-4 justify-center md:justify-between fixed w-full bottom-0 !z-[9999999999]">
       <button className="text-secondary hover:shadow-md hover:scale-95 transition-all duration-300 text-sm font-normal px-5 py-[10px] border border-secondary bg-white rounded-[40px] whitespace-nowrap">
         Join our community
       </button>

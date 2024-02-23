@@ -4,7 +4,7 @@ const FlowSidebar = () => {
   const { activeComponent } = useSelector((state) => state.global);
   return (
     <div className="w-[400px] bg-indigo-50 h-screen border-r-2 border-indigo-400">
-      {activeComponent && activeComponent}
+      {activeComponent?.component && activeComponent?.component}
     </div>
   );
 };
