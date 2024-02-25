@@ -5,6 +5,7 @@ import {
   setActionData,
   setActiveComponent,
 } from "../../../redux/features/globals/globalsSlice";
+import { generateUniqueId } from "../../../lib/services/services";
 
 const apiSteps = [
   "Step 1 Define why",
@@ -20,28 +21,12 @@ const StartAction = () => {
 
   const dispatch = useDispatch();
 
-  function generateUniqueId() {
-    // Get the current date and time
-    const now = new Date();
-
-    // Format the date and time as a string
-    const dateString = now.toISOString().replace(/[-:TZ]/g, "");
-
-    // Generate a random number between 0 and 9999
-    const randomNumber = Math.floor(Math.random() * 10000);
-
-    // Combine the date string and random number to create the unique ID
-    const uniqueId = dateString + randomNumber.toString().padStart(4, "0");
-
-    return uniqueId;
-  }
-
-  const handleSetData = (data) => {
-    const id = generateUniqueId();
+  const handleSetData = async (data) => {
+    const id = await generateUniqueId();
     dispatch(
       setActionData({
         parent_id: activeComponent?.parent_id,
-        new_id: `${activeComponent?.parent_id}${id}`,
+        new_id: `${id}`,
         data: data,
       })
     );

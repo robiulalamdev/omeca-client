@@ -12,21 +12,20 @@ import ReactFlow, {
 import dagre from "dagre";
 import "reactflow/dist/style.css";
 import CustomNode from "./CustomNode";
-import { useDispatch, useSelector } from "react-redux";
-import { setActionData } from "../../redux/features/globals/globalsSlice";
 
 export const initialNodes = [
   {
-    id: "1",
+    id: "0",
     type: "custom",
     data: {
-      id: "1",
+      id: "0",
       name: "Initial",
+      background: "#000000",
       component: "Int",
     },
-    sourcePosition: "right",
-    targetPosition: "left",
-    position: { x: 0, y: 0 },
+    sourcePosition: "left",
+    targetPosition: "right",
+    position: { x: 400, y: 400 },
   },
 ];
 
@@ -99,15 +98,15 @@ const FlowHome = () => {
     (params) =>
       setEdges((eds) =>
         addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: true },
+          { ...params, type: ConnectionLineType.Bezier, animated: true },
           eds
         )
       ),
     []
   );
 
-  console.log("Nodes: ", nodes);
-  console.log("Edges: ", edges);
+  // console.log("Nodes: ", nodes);
+  // console.log("Edges: ", edges);
 
   return (
     <div className="w-full z-10 relative">
@@ -118,7 +117,7 @@ const FlowHome = () => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
-        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineType={ConnectionLineType.Bezier}
         fitView
       >
         {/* <Panel position="top-right">

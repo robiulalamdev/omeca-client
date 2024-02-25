@@ -62,7 +62,7 @@ const Header = () => {
     },
   ];
   return (
-    <div className="px-8 pt-[23px] pb-3 shadow-prompts bg-white  z-10 fixed top-0 w-full ">
+    <div className="px-8 pt-[23px] pb-3 shadow-prompts bg-white fixed top-0 w-full !z-[999999999999999]">
       <div className="hidden md:flex flex-wrap justify-between gap-5 items-center">
         <div className="md:flex md:flex-shrink-0 items-center gap-[33px]">
           <div>
