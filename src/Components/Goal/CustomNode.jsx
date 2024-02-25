@@ -10,7 +10,7 @@ import {
 } from "../../redux/features/globals/globalsSlice";
 import { iPlus } from "../../lib/icons/icons";
 import StartAction from "../sidebar/actions/StartAction";
-import { generateUniqueId, getRandomColor } from "../../lib/services/services";
+import { generateUniqueId } from "../../lib/services/services";
 
 const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
   const { actionData } = useSelector((state) => state.global);
@@ -44,8 +44,7 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
     setEdges((prevEdges) => [...prevEdges, newEdge]);
   };
 
-  const handleNode = async (parentId, newId, data) => {
-    const color = await getRandomColor();
+  const handleNode = async (parentId, newId, data, background) => {
     const newNode = {
       id: newId,
       type: "custom",
@@ -53,7 +52,7 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
       targetPosition: "right",
       data: {
         id: newId,
-        background: color,
+        background: background,
         name: "New Node",
         job: "New Job",
         emoji: "🚀",
@@ -75,8 +74,12 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
 
   useMemo(() => {
     if (actionData?.parent_id) {
-      console.log(actionData);
-      handleNode(actionData?.parent_id, actionData?.new_id, actionData?.data);
+      handleNode(
+        actionData?.parent_id,
+        actionData?.new_id,
+        actionData?.data,
+        actionData?.background
+      );
       dispatch(setActionData(null));
     }
   }, [actionData]);
@@ -88,7 +91,10 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
   };
 
   return (
-    <div style={{ backgroundColor: data?.background }}>
+    <div className="relative" style={{ backgroundColor: data?.background }}>
+      <div className="text-white w-fit h-fit px-3 py-2 border rounded-full bg-black absolute -top-3 -right-3">
+        {data?.id}
+      </div>
       {data?.component === "Int" && (
         <InitialNode
           data={data}

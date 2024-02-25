@@ -17,7 +17,7 @@ const apiSteps = [
 const StartAction = () => {
   const { activeComponent } = useSelector((state) => state.global);
   const [step, setStep] = useState(1);
-  const [stepTwo, setStepTwo] = useState("");
+  const [stepTwo, setStepTwo] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -28,10 +28,11 @@ const StartAction = () => {
         parent_id: activeComponent?.parent_id,
         new_id: `${id}`,
         data: data,
+        background: stepTwo?.color,
       })
     );
     setStep(1);
-    setStepTwo("");
+    setStepTwo(null);
     dispatch(setActiveComponent(null));
   };
 
@@ -64,26 +65,32 @@ const StartAction = () => {
             <div>
               <div className="grid grid-cols-2 border gap-2 cursor-pointer">
                 <div
-                  onClick={() => setStepTwo("API")}
-                  className="w-full h-10 rounded border border-blue-600 flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
+                  onClick={() => setStepTwo({ name: "API", color: "#8FD14F" })}
+                  className="w-full h-14 rounded border border-[#8FD14F] bg-[#8FD14F] text-white flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
                 >
                   API
                 </div>
                 <div
-                  onClick={() => setStepTwo("Prompt")}
-                  className="w-full h-10 rounded border border-blue-600 flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
+                  onClick={() =>
+                    setStepTwo({ name: "Prompt", color: "#414BB2" })
+                  }
+                  className="w-full h-14 rounded border border-[#414BB2] bg-[#414BB2] text-white flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
                 >
                   Prompt
                 </div>
                 <div
-                  onClick={() => setStepTwo("Bot-Robot")}
-                  className="w-full h-10 rounded border border-blue-600 flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
+                  onClick={() =>
+                    setStepTwo({ name: "Bot / Robot", color: "#1A1A1A" })
+                  }
+                  className="w-full h-14 rounded border border-[#1A1A1A] bg-[#1A1A1A] text-white flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
                 >
-                  Bot-Robot
+                  Bot / Robot
                 </div>
                 <div
-                  onClick={() => setStepTwo("Human")}
-                  className="w-full h-10 rounded border border-blue-600 flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
+                  onClick={() =>
+                    setStepTwo({ name: "Human", color: "#FAC710" })
+                  }
+                  className="w-full h-14 rounded border border-[#FAC710] bg-[#FAC710] text-white flex justify-center items-center text-sm font-semibold hover:bg-blue-600 hover:text-white cursor-pointer uppercase"
                 >
                   Human
                 </div>
@@ -91,7 +98,7 @@ const StartAction = () => {
             </div>
           )}
 
-          {stepTwo === "Prompt" && (
+          {stepTwo?.name === "Prompt" && (
             <div
               onClick={() =>
                 handleSetData("User will select single prompt or prompt chain")
@@ -101,7 +108,7 @@ const StartAction = () => {
               User will select single prompt or prompt chain
             </div>
           )}
-          {stepTwo === "API" && (
+          {stepTwo?.name === "API" && (
             <div className="grid grid-cols-1 gap-2">
               {apiSteps.map((api, index) => (
                 <div
