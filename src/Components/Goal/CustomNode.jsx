@@ -44,7 +44,7 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
     setEdges((prevEdges) => [...prevEdges, newEdge]);
   };
 
-  const handleNode = async (parentId, newId, data, background) => {
+  const handleNode = async (parentId, newId, data, code, background) => {
     const newNode = {
       id: newId,
       type: "custom",
@@ -57,6 +57,7 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
         job: "New Job",
         emoji: "🚀",
         data: data,
+        code: code,
         componentData: actionData,
       },
       position: { x: 400, y: 400 },
@@ -78,6 +79,7 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
         actionData?.parent_id,
         actionData?.new_id,
         actionData?.data,
+        actionData?.code || "",
         actionData?.background
       );
       dispatch(setActionData(null));
@@ -89,6 +91,8 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
       setActiveComponent({ parent_id: data?.id, component: <StartAction /> })
     );
   };
+
+  const isData = data?.data || data?.code;
 
   return (
     <div className="relative" style={{ backgroundColor: data?.background }}>
@@ -106,13 +110,17 @@ const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
         />
       )}
 
-      {data?.data && (
+      {isData && (
         <div
-          className="px-4 py-2 shadow-md rounded border-[1px] border-blue-600 min-w-[300px] max-w-[300px] max-h-fit min-h-[100px] backdrop:blur-sm"
+          className="px-4 py-2 shadow-md rounded-md border-[1px] border-blue-600 min-w-[300px] max-w-[300px] max-h-fit min-h-[100px] backdrop:blur-sm"
           style={{ backgroundColor: data?.background }}
         >
           <div className="">
-            <p className="text-xs text-white mt-3">{data?.data}</p>
+            {data?.data && (
+              <p className="text-xs text-white mt-3">{data?.data}</p>
+            )}
+
+            {data?.code && <div>{data?.code}</div>}
 
             <ul className="text-gray-300 font-semibold text-sm mt-5 list-disc ml-5">
               <li

@@ -6,6 +6,8 @@ import {
   setActiveComponent,
 } from "../../../redux/features/globals/globalsSlice";
 import { generateUniqueId } from "../../../lib/services/services";
+import { useForm } from "react-hook-form";
+import HumanAction from "./HumanAction";
 
 const apiSteps = [
   "Step 1 Define why",
@@ -15,9 +17,12 @@ const apiSteps = [
 ];
 
 const StartAction = () => {
+  const { handleSubmit, register } = useForm();
+
   const { activeComponent } = useSelector((state) => state.global);
   const [step, setStep] = useState(1);
   const [stepTwo, setStepTwo] = useState(null);
+  const [botRobot, setBotRobot] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -28,6 +33,40 @@ const StartAction = () => {
         parent_id: activeComponent?.parent_id,
         new_id: `${id}`,
         data: data,
+        background: stepTwo?.color,
+      })
+    );
+    setStep(1);
+    setStepTwo(null);
+    dispatch(setActiveComponent(null));
+  };
+
+  const handleFormData = async (data) => {
+    const id = await generateUniqueId();
+    dispatch(
+      setActionData({
+        parent_id: activeComponent?.parent_id,
+        new_id: `${id}`,
+        data: false,
+        code: (
+          <div className="bg-teal-50 rounded-[10px] p-2 max-w-[270px] w-full mx-auto">
+            <p className="text-base text-blue-600 font-bold text-center uppercase tracking-[0.90px]">
+              Form Data
+            </p>
+            <p className="text-sm text-slate-900 font-medium break-words">
+              {data?.step_1}
+            </p>
+            <p className="text-sm text-slate-900 font-medium break-words mt-2">
+              {data?.step_2}
+            </p>
+            <p className="text-sm text-slate-900 font-medium break-words mt-2">
+              {data?.step_3}
+            </p>
+            <p className="text-sm text-slate-900 font-medium break-words mt-2">
+              {data?.step_4}
+            </p>
+          </div>
+        ),
         background: stepTwo?.color,
       })
     );
@@ -119,6 +158,94 @@ const StartAction = () => {
                   {api}
                 </div>
               ))}
+            </div>
+          )}
+          {stepTwo?.name === "Bot / Robot" && (
+            <div>
+              {!botRobot && (
+                <>
+                  <div className="flex items-start gap-3">
+                    <button
+                      onClick={() => setBotRobot(1)}
+                      className="w-full h-8 bg-blue-600 text-white flex justify-center items-center rounded text-xs"
+                    >
+                      Bot
+                    </button>
+                    <button
+                      onClick={() => setBotRobot(1)}
+                      className="w-full h-8 bg-sky-600 text-white flex justify-center items-center rounded text-xs"
+                    >
+                      Robot
+                    </button>
+                  </div>
+                </>
+              )}
+              {botRobot === 1 && (
+                <form
+                  onSubmit={handleSubmit(handleFormData)}
+                  className="grid grid-cols-1 gap-2"
+                >
+                  <div>
+                    <span className="text-sm text-[12px] text-slate-950 mb-[4px]">
+                      How are you Currently doing this
+                    </span>
+                    <input
+                      {...register("step_1", { required: true })}
+                      type="text"
+                      required
+                      className="w-full h-[40px] rounded-[8px] outline-none border bg-slate-50 px-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-sm text-[12px] text-slate-950 mb-[4px]">
+                      Process Mining
+                    </span>
+                    <input
+                      {...register("step_2", { required: true })}
+                      type="text"
+                      required
+                      className="w-full h-[40px] rounded-[8px] outline-none border bg-slate-50 px-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-sm text-[12px] text-slate-950 mb-[4px]">
+                      Process Mapping
+                    </span>
+                    <input
+                      {...register("step_3", { required: true })}
+                      type="text"
+                      required
+                      className="w-full h-[40px] rounded-[8px] outline-none border bg-slate-50 px-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-sm text-[12px] text-slate-950 mb-[4px]">
+                      Deep Learning
+                    </span>
+                    <input
+                      {...register("step_4", { required: true })}
+                      type="text"
+                      required
+                      className="w-full h-[40px] rounded-[8px] outline-none border bg-slate-50 px-2 text-sm"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full h-[42px] bg-blue-600 hover:bg-blue-700 text-sm font-semibold mt-2 text-white rounded-[8px]"
+                  >
+                    Submit
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+          {stepTwo?.name === "Human" && (
+            <div className="">
+              <HumanAction
+                stepTwo={stepTwo}
+                setStep={setStep}
+                setStepTwo={setStepTwo}
+              />
             </div>
           )}
         </>

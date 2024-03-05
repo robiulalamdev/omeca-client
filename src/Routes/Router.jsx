@@ -8,12 +8,17 @@ import DashboardLayout from "../Layout/DashboardLayout";
 import Goal from "../Pages/Goal";
 import Prompts from "../Pages/Prompts";
 import DataSourch from "../Pages/DataSourch";
+import Test from "../Pages/Test";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
+      {
+        path: "/test",
+        element: <Test />,
+      },
       {
         path: "/",
         element: <Home />,
