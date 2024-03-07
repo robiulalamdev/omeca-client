@@ -102,14 +102,26 @@
 // };
 
 // export default Prompts;
-import PromptsPage from '../Components/Prompts/PromptsPage';
+import { useSelector } from "react-redux";
+import FlowHome from "../Components/Goal/FlowHome";
+import FlowSidebar from "../Components/sidebar/FlowSidebar";
 
 const Prompts = () => {
-    return (
-        <div className="lg:ml-[221px] m-[20px]">
-            <PromptsPage />
-        </div>
-    );
+  const { activeComponent } = useSelector((state) => state.global);
+  return (
+    <div className="flex items-start justify-between relative">
+      <FlowHome />
+      {activeComponent?.component && <FlowSidebar />}
+    </div>
+  );
 };
+
+// const Prompts = () => {
+//   return (
+//     <div className="lg:ml-[221px] m-[20px]">
+//       <PromptsPage />
+//     </div>
+//   );
+// };
 
 export default Prompts;
