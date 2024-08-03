@@ -6,6 +6,8 @@ import {
   setActionData,
   setActiveComponent,
 } from "../../../redux/features/globals/globalsSlice";
+import { useSendMessageMutation } from "../../../redux/features/chat/chatApi";
+import { toast } from "react-toastify";
 
 const HumanAction = ({ stepTwo, setStep, setStepTwo }) => {
   const { activeComponent } = useSelector((state) => state.global);
@@ -15,19 +17,41 @@ const HumanAction = ({ stepTwo, setStep, setStepTwo }) => {
 
   const dispatch = useDispatch();
 
+  const [sendMessage, { isLoading }] = useSendMessageMutation();
+
+  const handleSendMessage = async (message) => {
+    const options = {
+      data: {
+        userPrompt: message,
+        // historyId: currentHistory?._id,
+      },
+    };
+    const result = await sendMessage(options);
+    return result;
+    // if (result?.data?.success) {
+
+    // }
+  };
+
   const handleSetData = async (data) => {
-    const id = await generateUniqueId();
-    dispatch(
-      setActionData({
-        parent_id: activeComponent?.parent_id,
-        new_id: `${id}`,
-        data: data,
-        background: stepTwo?.color,
-      })
-    );
-    setStep(1);
-    setStepTwo(null);
-    dispatch(setActiveComponent(null));
+    const result = await handleSendMessage(data);
+    // console.log(result);
+    if (result?.data?.success) {
+      const id = await generateUniqueId();
+      dispatch(
+        setActionData({
+          parent_id: activeComponent?.parent_id,
+          new_id: `${id}`,
+          data: result?.data?.data?.assistantResponse,
+          background: stepTwo?.color,
+        })
+      );
+      setStep(1);
+      setStepTwo(null);
+      dispatch(setActiveComponent(null));
+    } else {
+      toast.error("Response generate failed");
+    }
   };
 
   const handlePermission = async (e) => {

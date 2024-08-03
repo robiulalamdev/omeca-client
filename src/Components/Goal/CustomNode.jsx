@@ -11,10 +11,26 @@ import {
 import { iPlus } from "../../lib/icons/icons";
 import StartAction from "../sidebar/actions/StartAction";
 import { generateUniqueId } from "../../lib/services/services";
+import { useSendMessageMutation } from "../../redux/features/chat/chatApi";
 
 const CustomNode = ({ data, nodes, edges, setNodes, setEdges }) => {
   const { actionData } = useSelector((state) => state.global);
   const dispatch = useDispatch();
+  const [sendMessage, { isLoading }] = useSendMessageMutation();
+
+  const handleSendMessage = async () => {
+    const options = {
+      data: {
+        userPrompt: "",
+        // historyId: currentHistory?._id,
+      },
+    };
+    const result = await sendMessage(options);
+    console.log(result);
+    // if (result?.data?.success) {
+
+    // }
+  };
 
   const handleParentCopy = async (parentId, parentColor) => {
     const getId = await generateUniqueId();

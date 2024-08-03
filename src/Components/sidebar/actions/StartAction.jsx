@@ -8,6 +8,8 @@ import {
 import { generateUniqueId } from "../../../lib/services/services";
 import { useForm } from "react-hook-form";
 import HumanAction from "./HumanAction";
+import { useSendMessageMutation } from "../../../redux/features/chat/chatApi";
+import { toast } from "react-toastify";
 
 const apiSteps = [
   "Step 1 Define why",
@@ -26,53 +28,82 @@ const StartAction = () => {
 
   const dispatch = useDispatch();
 
+  const [sendMessage, { isLoading }] = useSendMessageMutation();
+
+  const handleSendMessage = async (message) => {
+    const options = {
+      data: {
+        userPrompt: message,
+        // historyId: currentHistory?._id,
+      },
+    };
+    const result = await sendMessage(options);
+    return result;
+    // if (result?.data?.success) {
+
+    // }
+  };
+
   const handleSetData = async (data) => {
-    const id = await generateUniqueId();
-    dispatch(
-      setActionData({
-        parent_id: activeComponent?.parent_id,
-        new_id: `${id}`,
-        data: data,
-        background: stepTwo?.color,
-      })
-    );
-    setStep(1);
-    setStepTwo(null);
-    dispatch(setActiveComponent(null));
+    const result = await handleSendMessage(data);
+    // console.log(result);
+    if (result?.data?.success) {
+      const id = await generateUniqueId();
+      dispatch(
+        setActionData({
+          parent_id: activeComponent?.parent_id,
+          new_id: `${id}`,
+          data: result?.data?.data?.assistantResponse,
+          background: stepTwo?.color,
+        })
+      );
+      setStep(1);
+      setStepTwo(null);
+      dispatch(setActiveComponent(null));
+    } else {
+      toast.error("Response generate failed");
+    }
   };
 
   const handleFormData = async (data) => {
-    const id = await generateUniqueId();
-    dispatch(
-      setActionData({
-        parent_id: activeComponent?.parent_id,
-        new_id: `${id}`,
-        data: false,
-        code: (
-          <div className="bg-teal-50 rounded-[10px] p-2 max-w-[270px] w-full mx-auto">
-            <p className="text-base text-blue-600 font-bold text-center uppercase tracking-[0.90px]">
-              Form Data
-            </p>
-            <p className="text-sm text-slate-900 font-medium break-words">
-              {data?.step_1}
-            </p>
-            <p className="text-sm text-slate-900 font-medium break-words mt-2">
-              {data?.step_2}
-            </p>
-            <p className="text-sm text-slate-900 font-medium break-words mt-2">
-              {data?.step_3}
-            </p>
-            <p className="text-sm text-slate-900 font-medium break-words mt-2">
-              {data?.step_4}
-            </p>
-          </div>
-        ),
-        background: stepTwo?.color,
-      })
-    );
-    setStep(1);
-    setStepTwo(null);
-    dispatch(setActiveComponent(null));
+    const message = `1. How are you Currently doing this: ${data?.step_1}, 2. Process Mining: ${data?.step_2} 3. Process Mapping: ${data?.step_3} 4. Deep Learning: ${data?.step_4}`;
+    const result = await handleSendMessage(message);
+    // console.log(result);
+    if (result?.data?.success) {
+      const id = await generateUniqueId();
+      dispatch(
+        setActionData({
+          parent_id: activeComponent?.parent_id,
+          new_id: `${id}`,
+          data: result?.data?.data?.assistantResponse,
+          code: (
+            <div className="bg-teal-50 rounded-[10px] p-2 max-w-[270px] w-full mx-auto">
+              <p className="text-base text-blue-600 font-bold text-center uppercase tracking-[0.90px]">
+                Form Data
+              </p>
+              <p className="text-sm text-slate-900 font-medium break-words">
+                {data?.step_1}
+              </p>
+              <p className="text-sm text-slate-900 font-medium break-words mt-2">
+                {data?.step_2}
+              </p>
+              <p className="text-sm text-slate-900 font-medium break-words mt-2">
+                {data?.step_3}
+              </p>
+              <p className="text-sm text-slate-900 font-medium break-words mt-2">
+                {data?.step_4}
+              </p>
+            </div>
+          ),
+          background: stepTwo?.color,
+        })
+      );
+      setStep(1);
+      setStepTwo(null);
+      dispatch(setActiveComponent(null));
+    } else {
+      toast.error("Response generate failed");
+    }
   };
 
   return (
